@@ -1,0 +1,167 @@
+all:
+  - base_option
+  - train_option
+  - test_option
+base_option:
+  name: ''
+  gpu_ids: '0'
+  verbose: false
+  model_name: model_name
+  dataloader_name: dataloader_name
+  logger_name: logger_name
+  batch_size: 32
+  out_size: 256
+  output_nch: 3
+  save_dir: '../checkpoints'
+train_option:
+  n_epochs: 100
+  n_epochs_decay: 100
+  epoch: 1
+  continue_train: false
+test_option:
+  results_dir: 'results'
+  num_test: 50
+model_name:
+  - vanilla_gan:  # gan, dcgan
+      discriminator_module_name: discriminator_module_name
+      generator_module_name: generator_module_name
+      discriminator_optimizer_name: discriminator_optimizer_name
+      generator_optimizer_name: generator_optimizer_name
+      discriminator_scheduler_name: scheduler_name
+      generator_scheduler_name: scheduler_name
+      init_weight_name: init_weight_name
+      gan_loss_name: gan_loss_name
+  - pix2pix:  # pix2pix
+      discriminator_module_name: discriminator_module_name
+      generator_module_name: generator_module_name
+      discriminator_optimizer_name: discriminator_optimizer_name
+      generator_optimizer_name: generator_optimizer_name
+      discriminator_scheduler_name: scheduler_name
+      generator_scheduler_name: scheduler_name
+      init_weight_name: init_weight_name
+      gan_loss_name: gan_loss_name
+      l1_loss_name: l1_loss_name
+      input_nch: 1
+      direction: 'a2b'
+  - one2one_pix2pix:
+      discriminator_module_name: discriminator_module_name
+      generator_module_name: generator_module_name
+      discriminator_optimizer_name: discriminator_optimizer_name
+      generator_optimizer_name: generator_optimizer_name
+      discriminator_scheduler_name: scheduler_name
+      generator_scheduler_name: scheduler_name
+      init_weight_name: init_weight_name
+      gan_loss_name: gan_loss_name
+      l1_loss_name: l1_loss_name
+      input_nch: 1
+      direction: 'a2b'
+      one2one: false
+discriminator_module_name:
+  - discriminator_vanilla_fc:
+      discriminator_n_layers: '512,256'
+  - discriminator_cnn:
+      discriminator_n_blocks: 2
+      discriminator_norm_module_name: norm_module_name
+  - n_layer:
+      ndf: 64
+      discriminator_n_layers: 3
+      discriminator_norm_module_name: norm_module_name
+  - pixel:
+      ndf: 64
+      discriminator_norm_module_name: norm_module_name
+generator_module_name:
+  - generator_vanilla_fc:
+      latent_dim: 64
+      generator_norm_module_name: norm_module_name
+      generator_n_layers: '128,256,512,1024'
+  - generator_cnn:
+      generator_n_blocks: 2
+      latent_dim: 64
+      generator_norm_module_name: norm_module_name
+  - resnet:
+      ngf: 64
+      no_dropout: false
+      generator_norm_module_name: norm_module_name
+      generator_padding_module_name: padding_module_name
+  - unet:
+      ngf: 64
+      no_dropout: false
+      generator_norm_module_name: norm_module_name
+discriminator_optimizer_name:
+  - discriminator_adam:
+      discriminator_lr: 0.00001
+      discriminator_beta1: 0.5
+      discriminator_beta2: 0.999
+generator_optimizer_name:
+  - generator_adam:
+      generator_lr: 0.001
+      generator_beta1: 0.5
+      generator_beta2: 0.999
+scheduler_name:
+  - cosine
+  - linear
+  - plateau
+  - discriminator_step:
+      discriminator_lr_decay_iters: 50
+  - generator_step:
+      generator_lr_decay_iters: 50
+init_weight_name:
+  - normal:
+      init_gain: 0.02
+  - kaiming:
+      init_gain: 0.02
+  - xavier:
+      init_gain: 0.02
+  - orthogonal:
+      init_gain: 0.02
+gan_loss_name:
+  - gan_loss
+  - lsgan_loss
+  - wgangp_loss
+l1_loss_name:
+  - l1_loss:
+      l1_lambda: 100
+norm_module_name:
+  - none
+  - batch_norm_1d
+  - batch_norm_2d
+  - instance_norm
+padding_module_name:
+  - none
+  - reflect
+  - replication
+dataloader_name:
+  - simple:
+      dataset_name: dataset_name
+      transform_name: transform_name
+      serial_batches: false
+      num_threads: 0
+dataset_name:
+  - fillet_shadow2contour:
+      max_dataset_size: inf
+      solver_output_dir: '../inputs/solver_output_0525'
+      z_min: 0
+      z_max: 5
+  - tree_gravity_shadow2contour:
+      max_dataset_size: inf
+      file_name_json_path: '../inputs/tree_gravity_shadow2contour/filename_train.json'
+      img_dir: '../inputs/tree_gravity_shadow2contour/IMAGE_PAIRS_273x193px'
+  - mnist:
+      max_dataset_size: inf
+      img_dir: '../inputs/mnist'
+transform_name:
+  - affine:
+      transfrom_degree: 15
+      transform_translate_x: 0.1
+      transform_translate_y: 0.1
+      transform_scale_min: 0.8
+      transform_scale_max: 1.2
+  - crop_and_random_flip
+  - vanilla_numpy2tensor
+logger_name:
+  - simple:
+      save_freq: 5
+  - mlflow:
+      save_freq: 5
+      mlflow_root_dir: '../mlruns'
+      run_name: 'test'

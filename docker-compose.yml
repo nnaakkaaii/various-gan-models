@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  python3:
+    image: python/various-gan-models:1.0.0
+    restart: always
+    build:
+      context: .
+      dockerfile: ./docs/Dockerfile
+    container_name: 'python3'
+    tty: true
+    volumes:
+      - ./inputs:./code/inputs
+      - ./mlruns:./code/mlruns
+      - ./checkpoints:./code/checkpoints

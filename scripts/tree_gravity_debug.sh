@@ -1,0 +1,33 @@
+python3 train.py \
+  --name tree_gravity_debug \
+  --gpu_ids 0 \
+  --verbose \
+  --model_name one2one_pix2pix \
+  --dataloader_name simple \
+  --logger_name mlflow \
+  --batch_size 16 \
+  --out_size 256 \
+  --output_nch 3 \
+  --n_epochs 10 \
+  --n_epochs_decay 10 \
+  --discriminator_module_name n_layer \
+  --generator_module_name unet \
+  --discriminator_optimizer_name discriminator_adam \
+  --generator_optimizer_name generator_adam \
+  --discriminator_scheduler_name discriminator_step \
+  --generator_scheduler_name generator_step \
+  --init_weight_name orthogonal \
+  --gan_loss_name lsgan_loss \
+  --l1_loss_name l1_loss \
+  --input_nch 1 \
+  --direction a2b \
+  --one2one \
+  --ndf 64 \
+  --discriminator_n_layers 3 \
+  --discriminator_norm_module_name instance_norm \
+  --ngf 64 \
+  --generator_norm_module_name instance_norm \
+  --discriminator_beta1 0.6 \
+  --dataset_name tree_gravity_shadow2contour \
+  --transform_name crop_and_random_flip \
+  --max_dataset_size 2000

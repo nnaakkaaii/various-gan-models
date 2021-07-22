@@ -1,0 +1,1 @@
+mkdir -p ./inputs/fillet_shadow2contour

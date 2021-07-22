@@ -1,0 +1,24 @@
+export PYTHONPATH=.
+python3 train.py \
+  --name mnist_debug \
+  --verbose \
+  --model_name vanilla_gan \
+  --dataloader_name simple \
+  --logger_name mlflow \
+  --out_size 28 \
+  --output_nch 1 \
+  --n_epochs 10 \
+  --n_epochs_decay 10 \
+  --discriminator_module_name discriminator_vanilla_fc \
+  --generator_module_name generator_vanilla_fc \
+  --discriminator_optimizer_name discriminator_adam \
+  --generator_optimizer_name generator_adam \
+  --discriminator_scheduler_name linear \
+  --generator_scheduler_name linear \
+  --init_weight_name xavier \
+  --gan_loss_name wgangp_loss \
+  --generator_norm_module_name batch_norm_1d \
+  --batch_size 16 \
+  --dataset_name mnist \
+  --max_dataset_size 1000 \
+  --transform_name affine
