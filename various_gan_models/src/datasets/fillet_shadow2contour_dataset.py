@@ -9,19 +9,18 @@ from typing import Any, Dict, List
 
 import numpy as np
 import pandas as pd
-import torch.utils.data as data
 
 from . import base_dataset
 
 
-def create_dataset(transform: Any, opt: argparse.Namespace) -> data.Dataset:
+def create_dataset(transform: Any, opt: argparse.Namespace) -> base_dataset.BaseDataset:
     return FilletShadow2ContourDataset(
         transform=transform, max_dataset_size=opt.max_dataset_size, z_min=opt.z_min, z_max=opt.z_max, solver_output_dir=opt.solver_output_dir)
 
 
 def modify_dataset_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.set_defaults(transform_name='vanilla_numpy2tensor')
-    parser.add_argument('--solver_output_dir', type=str, default=os.path.join('..', 'inputs', 'solver_output_0525'))
+    parser.add_argument('--solver_output_dir', type=str, default=os.path.join('../dataloaders', 'inputs', 'solver_output_0525'))
     parser.add_argument('--z_min', type=float, default=0)
     parser.add_argument('--z_max', type=float, default=5)
     return parser

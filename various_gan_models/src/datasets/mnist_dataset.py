@@ -3,18 +3,17 @@ import os
 from typing import Any, Dict
 
 import torch
-import torch.utils.data as data
 from torchvision.datasets import MNIST
 
 from . import base_dataset
 
 
-def create_dataset(transform: Any, opt: argparse.Namespace) -> data.Dataset:
+def create_dataset(transform: Any, opt: argparse.Namespace) -> base_dataset.BaseDataset:
     return MnistDataset(transform, opt.max_dataset_size, opt.img_dir)
 
 
 def modify_dataset_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser.add_argument('--img_dir', type=str, default=os.path.join('..', 'inputs', 'mnist'), help='mnistデータを保存する場所')
+    parser.add_argument('--img_dir', type=str, default=os.path.join('../dataloaders', 'inputs', 'mnist'), help='mnistデータを保存する場所')
     return parser
 
 

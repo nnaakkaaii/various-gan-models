@@ -3,8 +3,6 @@ from typing import Any
 
 import torch.utils.data as data
 
-from . import base_dataloader
-
 
 def create_dataloader(dataset: data.Dataset, opt: argparse.Namespace) -> data.DataLoader:
     return SimpleDataLoader(
@@ -14,7 +12,6 @@ def create_dataloader(dataset: data.Dataset, opt: argparse.Namespace) -> data.Da
 
 
 def modify_dataloader_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
-    parser = base_dataloader.modify_dataloader_commandline_options(parser)
     parser.add_argument('--serial_batches', action='store_true', help='dataloaderの読み込み順をランダムにするか')
     parser.add_argument('--num_threads', type=int, default=0, help='データローダーの並列数')
     return parser

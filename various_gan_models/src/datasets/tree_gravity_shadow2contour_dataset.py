@@ -3,20 +3,19 @@ import json
 import os
 from typing import Any, Dict, List
 
-import torch.utils.data as data
 from PIL import Image
 
 from . import base_dataset
 
 
-def create_dataset(transform: Any, opt: argparse.Namespace) -> data.Dataset:
+def create_dataset(transform: Any, opt: argparse.Namespace) -> base_dataset.BaseDataset:
     return TreeGravityShadow2ContourDataset(transform, opt.max_dataset_size, opt.img_dir, opt.filename_json_path)
 
 
 def modify_dataset_commandline_options(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
     parser.set_defaults(transform_name='crop_and_random_flip')
-    parser.add_argument('--filename_json_path', type=str, default=os.path.join('..', 'inputs', 'tree_gravity_shadow2contour', 'filename_train.json'))
-    parser.add_argument('--img_dir', type=str, default=os.path.join('..', 'inputs', 'tree_gravity_shadow2contour', 'IMAGE_PAIRS_273x193px'))
+    parser.add_argument('--filename_json_path', type=str, default=os.path.join('../dataloaders', 'inputs', 'tree_gravity_shadow2contour', 'filename_train.json'))
+    parser.add_argument('--img_dir', type=str, default=os.path.join('../dataloaders', 'inputs', 'tree_gravity_shadow2contour', 'IMAGE_PAIRS_273x193px'))
     return parser
 
 

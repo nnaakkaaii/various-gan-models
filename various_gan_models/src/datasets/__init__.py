@@ -1,12 +1,11 @@
 import argparse
 from typing import Any, Callable, Dict
 
-import torch.utils.data as data
-
+from .base_dataset import BaseDataset
 from . import (fillet_shadow2contour_dataset,
                tree_gravity_shadow2contour_dataset)
 
-datasets: Dict[str, Callable[[Any, argparse.Namespace], data.Dataset]] = {
+datasets: Dict[str, Callable[[Any, argparse.Namespace], BaseDataset]] = {
     'fillet_shadow2contour': fillet_shadow2contour_dataset.create_dataset,
     'tree_gravity_shadow2contour': tree_gravity_shadow2contour_dataset.create_dataset,
 }

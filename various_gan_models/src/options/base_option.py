@@ -3,6 +3,8 @@ import os
 
 import torch
 
+from ..datasets import datasets, dataset_options
+from ..transforms import transforms, transform_options
 from ..dataloaders import dataloader_options, dataloaders
 from ..loggers import logger_options, loggers
 from ..models import model_options, models
@@ -30,6 +32,8 @@ class BaseOption:
         parser.add_argument('--verbose', action='store_true', help='詳細を表示するか')
 
         parser.add_argument('--model_name', type=str, required=True, choices=models.keys())
+        parser.add_argument('--dataset_name', type=str, required=True, choices=datasets.keys())
+        parser.add_argument('--transform_name', type=str, required=True, choices=transforms.keys())
         parser.add_argument('--dataloader_name', type=str, required=True, choices=dataloaders.keys())
         parser.add_argument('--logger_name', type=str, required=True, choices=loggers.keys())
 
@@ -59,6 +63,14 @@ class BaseOption:
         opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
         model_option_setter = model_options[opt.model_name]
         parser = model_option_setter(parser)
+
+        opt, _ = parser.parse_known_args()
+        dataset_modify_commandline_options = dataset_options[opt.dataset_name]
+        parser = dataset_modify_commandline_options(parser)
+
+        opt, _ = parser.parse_known_args()
+        transform_modify_commandline_options = transform_options[opt.transform_name]
+        parser = transform_modify_commandline_options(parser)
 
         opt, _ = parser.parse_known_args()  # extract arguments; modify following arguments dynamically
         dataloader_option_setter = dataloader_options[opt.dataloader_name]
